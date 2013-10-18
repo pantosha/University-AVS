@@ -172,14 +172,20 @@ subtraction endp
 
 multiply proc x:REAL8,y:REAL8
     
-    mov errno, E_RANGE
+	fld x
+    fld y
+    fmul
+    fstp result
     ret
     
 multiply endp
 
 division proc x:REAL8,y:REAL8
     
-    mov errno, E_RANGE
+    fld x
+    fld y
+    fdiv
+    fstp result
     ret
    
 division endp
