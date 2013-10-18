@@ -8,17 +8,17 @@
     E_OPNOTSUPP  equ  2
     E_SYNTAX     equ  3
  
-    include windows.inc
-    include masm32.inc
-    include kernel32.inc
-    include shell32.inc
-    include msvcrt.inc
+    include \masm32\include\windows.inc
+    include \masm32\include\masm32.inc
+    include \masm32\include\kernel32.inc
+    include \masm32\include\shell32.inc
+    include \masm32\include\msvcrt.inc
     include \masm32\macros\macros.asm
 
-    includelib masm32.lib
-    includelib kernel32.lib
-    includelib shell32.lib
-    includelib msvcrt.lib
+    includelib \masm32\lib\masm32.lib
+    includelib \masm32\lib\kernel32.lib
+    includelib \masm32\lib\shell32.lib
+    includelib \masm32\lib\msvcrt.lib
 
     apply_operation PROTO :DWORD, :DWORD
     print_help PROTO
@@ -46,8 +46,8 @@ main proc
     LOCAL args: LPWSTR
     LOCAL nArgs: DWORD
     LOCAL ArgList: DWORD
-    LOCAL x: REAL8
-    LOCAL y: REAL8
+    LOCAL x: DWORD
+    LOCAL y: DWORD
     
     invoke GetCommandLineW
     mov args, EAX
