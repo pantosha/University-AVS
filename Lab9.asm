@@ -25,10 +25,10 @@
 
     .data
     
-    array_A     db      0Fh, 19h, 42h, 0A8h, 1Dh, 99h, 01h, 00h 
-    array_B     db      5Bh, 12h, 09h, 02h, 12h, 0D3h, 72h, 15h
-    array_C     db      12h, 03h, 0Bh, 80h, 5Ah, 36h, 0B0h, 21h
-    array_D     dw      0FFFh, 09h, 1DE0h, 0FDh, 1101h, 4321h, 8A3Ah, 091Ch  
+    array_A     db      06h, 02h, 42h, 0A8h, 1Dh, 99h, 01h, 00h 
+    array_B     db      02h, 08h, 09h, 02h, 12h, 0D3h, 72h, 15h
+    array_C     db      02h, 01h, 0Bh, 80h, 5Ah, 36h, 0B0h, 21h
+    array_D     dw      03h, 02h, 1DE0h, 0FDh, 1101h, 4321h, 8A3Ah, 091Ch  
     
     .data?
     
@@ -63,6 +63,7 @@ print_array proc array: DWORD
     push ECX
     xor EAX, EAX
     lodsw
+    cwde
     printf("F[%d] = %d\n", EBX, EAX)
     inc EBX
     pop ECX
@@ -82,9 +83,9 @@ mmx proc
     movq MM7, MM0
     
 ;convert 8 -> 16
-    movq MM3, MM7 ; !
-    pxor MM4, MM4 ; !
-    pcmpgtb MM3, MM4 ; !
+; signed or unsigned?
+    pxor MM3, MM3
+    pcmpgtb MM3, MM0
     
     punpcklbw MM0, MM3
     movq qword ptr [array_F], MM0
@@ -95,10 +96,10 @@ mmx proc
 
 ; C * D
     movq MM0, qword ptr [array_C]
-    
-    movq MM3, MM0 ; !
-    pxor MM4, MM4 ; !
-    pcmpgtb MM3, MM4 ; !
+    movq MM7, MM0
+; signed or unsigned?    
+    pxor MM3, MM3
+    pcmpgtb MM3, MM0
     
 ; low
     punpcklbw MM0, MM3
@@ -106,7 +107,7 @@ mmx proc
     paddsw MM0, qword ptr [array_F]
     movq qword ptr [array_F], MM0
 ; high
-    movq MM0, qword ptr [array_C]
+    movq MM0, MM7
     punpckhbw MM0, MM3
     pmullw MM0, qword ptr [array_D + 8]
     paddsw MM0, qword ptr [array_F + 8]
